@@ -1,2 +1,33 @@
-# Unimodal Strategies
-Coming up soon towards ECML-PKDD Conference...
+# Unimodal Strategies in Density-Based Clustering
+<p align="center">
+  <img src="https://img.shields.io/badge/ECML--PKDD-2025-blue.svg" alt="ECML-PKDD 2025">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License">
+  <img src="https://img.shields.io/badge/python-3.9%2B-yellow.svg" alt="Python 3.9+">
+</p>
+
+A **light-weight, parameter-free drop-in for DBSCAN** that finds its radius (ε) automatically in *O(D N²)* time by exploiting a near-unimodal relation between ε and the resulting number of clusters *k*.  
+This repository accompanies the following paper, accepted to **ECML-PKDD 2025**:
+
+> **Unimodal Strategies in Density-Based Clustering**  
+> Oron Nir, Jay Tenenbaum, Ariel Shamir  
+> ECML-PKDD 2025 (research track)
+
+[[arXiv preprint]](https://arxiv.org/abs/######) | [[PDF]](Unimodal_Strategies-NirTenenbaumShamir-ECML-PKDD2025.pdf)
+
+---
+
+## Highlights
+
+* **Near-Unimodality Discovery** – We show that *k(ε)* is quasi-unimodal for fixed *MinPts* and prove it for uniform data.  
+* **Ternary-Search (DBSCAN-TS)** – Quickly homes in on the mode ε\* with a handful of DBSCAN calls.  
+* **TSE Estimator** – A 30× faster sub-sampling variant with minimal accuracy loss.  
+* Works out-of-the-box on **high-dimensional, large-scale** Vision, NLP, and Audio embeddings.
+
+---
+
+## Quick Start
+
+```bash
+git clone https://github.com/YOUR_USERNAME/UnimodalStrategies.git
+cd UnimodalStrategies
+pip install -r requirements.txt     # numpy, scipy, scikit-learn, matplotlib
