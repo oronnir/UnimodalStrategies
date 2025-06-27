@@ -18,10 +18,10 @@ This repository accompanies the following paper, accepted to **ECML-PKDD 2025**:
 
 ## Highlights
 
-* **Near-Unimodality Discovery** – We show that *k(ε)* is quasi-unimodal for fixed *MinPts* and prove it for uniform data.  
+* **Near-Unimodality Discovery** – We show that *k(ε)* is quasi-unimodal for fixed *MinPts*.  
 * **Ternary-Search (DBSCAN-TS)** – Quickly homes in on the mode ε\* with a handful of DBSCAN calls.  
-* **TSE Estimator** – A 30× faster sub-sampling variant with minimal accuracy loss.  
-* Works out-of-the-box on **high-dimensional, large-scale** Vision, NLP, and Audio embeddings.
+* **TSE Estimator** – A faster sub-sampling variant with minimal accuracy loss.  
+* Works out-of-the-box on **high-dimensional, large-scale** Vision, NLP, and Audio embeddings without dimensionality reduction.
 
 ---
 
@@ -31,3 +31,14 @@ This repository accompanies the following paper, accepted to **ECML-PKDD 2025**:
 git clone https://github.com/YOUR_USERNAME/UnimodalStrategies.git
 cd UnimodalStrategies
 pip install -r requirements.txt     # numpy, scipy, scikit-learn, matplotlib
+```
+
+For citation please use:
+```
+@inproceedings{nir2025unimodal,
+  title     = {Unimodal Strategies in Density-Based Clustering},
+  author    = {Nir, Oron and Tenenbaum, Jay and Shamir, Ariel},
+  booktitle = {Proceedings of the European Conference on Machine Learning and Principles & Practice of Knowledge Discovery in Databases (ECML-PKDD)},
+  year      = {2025},
+  url       = {https://github.com/oronnir/UnimodalStrategies}
+}
