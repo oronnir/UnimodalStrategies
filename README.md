@@ -28,7 +28,7 @@ This repository accompanies the following paper, accepted to **ECML-PKDD 2025**:
 ## Quick Start
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/UnimodalStrategies.git
+git clone https://github.com/oronnir/UnimodalStrategies.git
 cd UnimodalStrategies
 pip install -r requirements.txt     # numpy, scipy, scikit-learn, matplotlib
 ```
