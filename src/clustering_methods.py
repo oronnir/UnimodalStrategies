@@ -5,11 +5,55 @@
 # Code    : https://github.com/oronnir/UnimodalStrategies
 # License : MIT (see LICENSE file for full text)
 # =============================================================================
+"""
+The main method is the TSClustering from the paper and below a simplified version:
 
+def ternary_search(x, lb, ub, minpts, iterCap) -> ClusteringSolution:
+    '''
+    ternary_search: find the best epsilon for DBSCAN clustering using modified ternary search.
+    This is the simplified version of the ternary search from the paper.
+    '''
+    best = ClusteringSolution(None, lb, 0, 0, 0, None)
+    for it in range(0, iterCap, 2):
+        eps_range = (ub - lb) / 3
+        ml = lb + eps_range
+        mr = ub - eps_range
+
+        # score ml/mr and update if better
+        best, kl = cluster_and_update_best(best, x, minpts, ml, iterCap, it)
+        best, kr = cluster_and_update_best(best, x, minpts, mr, iterCap, it+1)
+
+        # update the search range based on the k
+        if kl == 1 and kr == 1:
+            # opt is on the left
+            ub = ml
+        elif kl > 1 and kr == 1:
+            # opt is either left or middle
+            ub = mr
+        elif kl == 0 and kr == 1:
+            # opt is in the middle
+            lb = ml
+            ub = mr
+        elif kl <= 1 < kr:
+            # opt is either right or middle
+            lb = ml
+        elif kl == 0 and kr == 0:
+            # opt is on the right
+            lb = mr
+        elif kl > 1 and kr > 1:
+            # case #6
+            if kl > kr:
+                ub = mr
+            else:
+                lb = ml
+
+    # check the mid-point
+    eps = (lb + ub) / 2
+    best, _ = cluster_and_update_best(best, x, minpts, eps, iterCap, iterCap*2)
+    return best
+"""
 import numpy as np
 from sklearn.cluster import DBSCAN
-from sklearn.neighbors import NearestNeighbors
-import matplotlib.pyplot as plt
 from logger_config import logger
 
 
@@ -52,51 +96,6 @@ def cluster_and_update_best(best_solution, x, min_samples, eps, max_iter, cur_it
         best_solution = ClusteringSolution(clusters, eps, coverage, actual_k)
         logger.debug(f'Improved best solution on iteration #{cur_iter + 1}/{max_iter + 1}: eps: {eps}, k: {actual_k}, coverage: {coverage}')
     return best_solution, actual_k
-
-
-def ternary_search(x, lb, ub, minpts, iterCap) -> ClusteringSolution:
-    """
-    ternary_search: find the best epsilon for DBSCAN clustering using modified ternary search.
-    This is the simplified version of the ternary search from the paper.
-    """
-    best = ClusteringSolution(None, lb, 0, 0, 0, None)
-    for it in range(0, iterCap, 2):
-        eps_range = (ub - lb) / 3
-        ml = lb + eps_range
-        mr = ub - eps_range
-
-        # score ml/mr and update if better
-        best, kl = cluster_and_update_best(best, x, minpts, ml, iterCap, it)
-        best, kr = cluster_and_update_best(best, x, minpts, mr, iterCap, it+1)
-
-        # update the search range based on the k
-        if kl == 1 and kr == 1:
-            # opt is on the left
-            ub = ml
-        elif kl > 1 and kr == 1:
-            # opt is either left or middle
-            ub = mr
-        elif kl == 0 and kr == 1:
-            # opt is in the middle
-            lb = ml
-            ub = mr
-        elif kl <= 1 < kr:
-            # opt is either right or middle
-            lb = ml
-        elif kl == 0 and kr == 0:
-            # opt is on the right
-            lb = mr
-        elif kl > 1 and kr > 1:
-            # case #6
-            if kl > kr:
-                ub = mr
-            else:
-                lb = ml
-
-    # check the mid-point
-    eps = (lb + ub) / 2
-    best, _ = cluster_and_update_best(best, x, minpts, eps, iterCap, iterCap*2)
-    return best
 
 
 def ternary_search_dbscan(x, eps_lb: float, eps_ub: float, min_samples: int, num_iterations: int, k_prior: int = -1) -> ClusteringSolution:
@@ -203,8 +202,6 @@ def ternary_search_dbscan_with_k(x, eps_lb: float, eps_ub: float, min_samples: i
 
     # run binary search to find the epsilon that yields the closest k
     eps_ub = 1.0
-    original_eps_lb = eps_lb
-    original_eps_ub = eps_ub
     best_solution = ts_solution
     eps_lb = ts_solution.epsilon
     k_at_eps_ub = 1
@@ -272,4 +269,3 @@ def dip_unimodality_test(ex_ks):
     import diptest
     dip = diptest.diptest(np.array(ex_ks))
     logger.info(f'Dip test result: {dip} over {len(ex_ks)} samples: DIP_stat={dip[0]} p_value={dip[1]}. If p_value >= 0.05, the data is unimodal!')
-
