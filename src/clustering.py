@@ -1,8 +1,14 @@
-import time
+# =============================================================================
+# ECML-PKDD 2025 ‒ “Unimodal Strategies in Density-Based Clustering”
+# Authors : Oron Nir*, Jay Tenenbaum, Ariel Shamir
+# Paper   : https://arxiv.org/abs/######   (pre-print link)
+# Code    : https://github.com/oronnir/UnimodalStrategies
+# License : MIT (see LICENSE file for full text)
+# =============================================================================
 
+import time
 import numpy as np
 from numpy import linalg as LA
-
 from scipy.spatial.distance import cosine
 from clustering_methods import ternary_search_dbscan, get_k_coverage, ternary_search_dbscan_with_k
 
