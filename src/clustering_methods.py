@@ -1,5 +1,5 @@
 # =============================================================================
-# ECML-PKDD 2025 ‒ “Unimodal Strategies in Density-Based Clustering”
+# ECML-PKDD 2025 ‒ "Unimodal Strategies in Density-Based Clustering"
 # Authors : Oron Nir, Jay Tenenbaum, Ariel Shamir
 # Paper   : https://arxiv.org/abs/######   (pre-print link)
 # Code    : https://github.com/oronnir/UnimodalStrategies
@@ -10,6 +10,7 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 from sklearn.neighbors import NearestNeighbors
 import matplotlib.pyplot as plt
+from logger_config import logger
 
 
 class ClusteringSolution:
@@ -49,7 +50,7 @@ def cluster_and_update_best(best_solution, x, min_samples, eps, max_iter, cur_it
     # favoring large k
     if actual_k > best_solution.k:
         best_solution = ClusteringSolution(clusters, eps, coverage, actual_k)
-        print(f'Improved best solution on iteration #{cur_iter + 1}/{max_iter + 1}: eps: {eps}, k: {actual_k}, coverage: {coverage}')
+        logger.debug(f'Improved best solution on iteration #{cur_iter + 1}/{max_iter + 1}: eps: {eps}, k: {actual_k}, coverage: {coverage}')
     return best_solution, actual_k
 
 
@@ -101,7 +102,7 @@ def ternary_search(x, lb, ub, minpts, iterCap) -> ClusteringSolution:
 def ternary_search_dbscan(x, eps_lb: float, eps_ub: float, min_samples: int, num_iterations: int, k_prior: int = -1) -> ClusteringSolution:
     """
     ternary_search_dbscan: find the best epsilon for DBSCAN clustering using modified ternary search.
-    We draw inspiration from the following algorithm: https://en.wikipedia.org/wiki/Ternary_search
+    We draw inspiration from the following algorithm: https://en.wikipedia.org/wiki/Ternary_search.
     :param x: feature vectors
     :param eps_ub: the upper bound of epsilon search range
     :param eps_lb: the initial epsilon to start the search from
@@ -114,12 +115,12 @@ def ternary_search_dbscan(x, eps_lb: float, eps_ub: float, min_samples: int, num
     bin_epsilons = []
     actual_k_right = 1
     best_solution = ClusteringSolution(None, eps_lb, 0, 0, 0, None)
-    print('Starting ternary_search_dbscan', dict(eps_lb=eps_lb, eps_ub=eps_ub, N=x.shape[0]))
+    logger.debug('Starting ternary_search_dbscan', extra={'eps_lb': eps_lb, 'eps_ub': eps_ub, 'N': x.shape[0]})
     for iteration in range(0, num_iterations, 2):
         eps_range = (eps_ub - eps_lb) / 3
         mid_left = eps_lb + eps_range
         mid_right = eps_ub - eps_range
-        print('Starting a loop over cluster_and_score calls', dict(lower_bound=eps_lb, upper_bound=eps_ub, mid_left=mid_left, mid_right=mid_right))
+        logger.debug('Starting a loop over cluster_and_score calls', extra={'lower_bound': eps_lb, 'upper_bound': eps_ub, 'mid_left': mid_left, 'mid_right': mid_right})
 
         # score the two mid-points and update the best solution if better
         best_solution, actual_k_left = cluster_and_update_best(best_solution, x, min_samples, mid_left, num_iterations, iteration)
@@ -160,8 +161,8 @@ def ternary_search_dbscan(x, eps_lb: float, eps_ub: float, min_samples: int, num
         else:
             # two cases are assumed to be not applicable:
             # actual_k_left == 1 and actual_k_right == 0, or actual_k_left > 1 and actual_k_right == 0
-            print('Unexpected case for ternary_search_dbscan - Ignoring the case and continuing!',
-                             dict(actual_k_left=actual_k_left, actual_k_right=actual_k_right))
+            logger.warning('Unexpected case for ternary_search_dbscan - Ignoring the case and continuing!',
+                         extra={'actual_k_left': actual_k_left, 'actual_k_right': actual_k_right})
 
     if k_prior <= 0 or k_prior < actual_k_right:
         # After max_steps, take the mid-point of the current range as the best solution
@@ -177,8 +178,8 @@ def ternary_search_dbscan(x, eps_lb: float, eps_ub: float, min_samples: int, num
     coverage, actual_k = solution_stats(best_solution.cluster_ids)
     best_solution = ClusteringSolution(cluster_ids=best_solution.cluster_ids, epsilon=epsilon, coverage=coverage,
                                        k=actual_k, tsk_eps_ub=eps_ub, bin_epsilons=bin_epsilons, bin_ks=bin_ks)
-    print('ternary_search_dbscan best results', dict(best_k=best_solution.k,
-          best_eps=best_solution.epsilon, best_coverage=best_solution.coverage))
+    logger.debug('ternary_search_dbscan best results', extra={'best_k': best_solution.k,
+          'best_eps': best_solution.epsilon, 'best_coverage': best_solution.coverage})
     return best_solution
 
 
@@ -211,10 +212,10 @@ def ternary_search_dbscan_with_k(x, eps_lb: float, eps_ub: float, min_samples: i
     eps_tolerance = 0.0000001
 
     # run binary search to find the epsilon that yields the closest k
-    print('Starting binary search dbscan for k', dict(eps_lb=eps_lb, eps_ub=eps_ub, N=x.shape[0]))
+    logger.debug('Starting binary search dbscan for k', extra={'eps_lb': eps_lb, 'eps_ub': eps_ub, 'N': x.shape[0]})
     iteration_counter = 1
     while k_prior != best_solution.k and k_at_eps_lb > k_at_eps_ub and eps_ub - eps_lb > eps_tolerance:
-        print(f'iteration #{iteration_counter}: eps_lb: {eps_lb}, eps_ub: {eps_ub}, k_at_eps_lb: {k_at_eps_lb}, k_at_eps_ub: {k_at_eps_ub}')
+        logger.debug(f'iteration #{iteration_counter}: eps_lb: {eps_lb}, eps_ub: {eps_ub}, k_at_eps_lb: {k_at_eps_lb}, k_at_eps_ub: {k_at_eps_ub}')
         iteration_counter += 1
         mid_point = (eps_lb + eps_ub) / 2
         cluster_mid = DBSCAN(eps=mid_point, min_samples=min_samples, p=2.0, n_jobs=-1, metric='cosine').fit(x).labels_
@@ -270,5 +271,5 @@ def dip_unimodality_test(ex_ks):
     """
     import diptest
     dip = diptest.diptest(np.array(ex_ks))
-    print(f'Dip test result: {dip} over {len(ex_ks)} samples: DIP_stat={dip[0]} p_value={dip[1]}. If p_value >= 0.05, the data is unimodal!')
-    
+    logger.info(f'Dip test result: {dip} over {len(ex_ks)} samples: DIP_stat={dip[0]} p_value={dip[1]}. If p_value >= 0.05, the data is unimodal!')
+

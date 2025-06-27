@@ -1,5 +1,5 @@
 # =============================================================================
-# ECML-PKDD 2025 ‒ “Unimodal Strategies in Density-Based Clustering”
+# ECML-PKDD 2025 ‒ "Unimodal Strategies in Density-Based Clustering"
 # Authors : Oron Nir, Jay Tenenbaum, Ariel Shamir
 # Paper   : https://arxiv.org/abs/######   (pre-print link)
 # Code    : https://github.com/oronnir/UnimodalStrategies
@@ -11,6 +11,7 @@ import numpy as np
 from numpy import linalg as LA
 from scipy.spatial.distance import cosine
 from clustering_methods import ternary_search_dbscan, get_k_coverage, ternary_search_dbscan_with_k
+from logger_config import logger
 
 
 def init_epsilon_ub(x, eps_lb, eps_ub, min_samples, alpha=0.2, num_iterations=10):
@@ -29,7 +30,7 @@ def init_epsilon_ub(x, eps_lb, eps_ub, min_samples, alpha=0.2, num_iterations=10
     sampled_row_indices = np.random.choice(x.shape[0], size=n_samples, replace=False)
     best_solution = ternary_search_dbscan(x[sampled_row_indices, :], eps_lb=eps_lb, eps_ub=eps_ub, min_samples=min_samples, num_iterations=num_iterations)
     if best_solution is None or best_solution.epsilon is None:
-        print('Clustering failed on initialization')
+        logger.error('Clustering failed on initialization')
         return eps_ub
     return best_solution.epsilon
 
@@ -58,7 +59,7 @@ def init_epsilon_lb(x, eps_lb, eps_ub, min_cluster_size, alpha, num_iterations=1
     # run the ternary search
     best_solution = ternary_search_dbscan(x, eps_lb=eps_lb, eps_ub=eps_ub, min_samples=min_cluster_size, num_iterations=num_iterations)
     if best_solution is None or best_solution.epsilon is None:
-        print('Clustering failed on initialization')
+        logger.error('Clustering failed on initialization')
         return eps_lb
     return best_solution.epsilon
 
@@ -73,9 +74,9 @@ def init_dbscan_hyper_parameters(x, min_cluster_size):
 
     start_time = time.time()
     eps_ub = min(eps_ub, init_epsilon_ub(x, eps_lb, eps_ub, min_cluster_size, alpha=alpha, num_iterations=iterations))
-    print('init_epsilon_ub', time.time() - start_time)
+    logger.debug('init_epsilon_ub', extra={'duration': time.time() - start_time})
     eps_lb = max(eps_lb, init_epsilon_lb(x, eps_lb, eps_ub, min_cluster_size, alpha=alpha, num_iterations=iterations))
-    print('init_epsilon_lb + UB', time.time() - start_time)
+    logger.debug('init_epsilon_lb + UB', extra={'duration': time.time() - start_time})
     return iterations, eps_lb, eps_ub
 
 
@@ -102,13 +103,13 @@ def ternary_search_clustering(features, min_cluster_size, k=None) -> (np.ndarray
         best_solution = ternary_search_dbscan_with_k(features, eps_lb=eps_lb, eps_ub=eps_ub, min_samples=min_cluster_size, num_iterations=iterations, k_prior=k)
 
     if best_solution is None or best_solution.cluster_ids is None:
-        print('Clustering failed', {'actual_input_size': actual_input_size})
+        logger.error('Clustering failed', extra={'actual_input_size': actual_input_size})
         return default_degenerate_solution
 
-    print('cast_clustering statistics', {'k_estimate': best_solution.k, 'p_noise': best_solution.coverage, 'actual_DBSCAN_n_clusters': best_solution.k})
+    logger.info('cast_clustering statistics', extra={'k_estimate': best_solution.k, 'p_noise': best_solution.coverage, 'actual_DBSCAN_n_clusters': best_solution.k})
     cluster_ids = best_solution.cluster_ids
 
     # get the best thumbnail per cluster
     actual_k, coverage = get_k_coverage(cluster_ids)
-    print('Clustering final statistics', {'actual_k_final': actual_k, 'coverage_final': coverage})
+    logger.info('Clustering final statistics', extra={'actual_k_final': actual_k, 'coverage_final': coverage})
     return cluster_ids, actual_k, best_solution
