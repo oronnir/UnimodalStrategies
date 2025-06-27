@@ -5,13 +5,16 @@
 # Code    : https://github.com/oronnir/UnimodalStrategies
 # License : MIT (see LICENSE file for full text)
 # =============================================================================
-import os.path
+import os
 import pickle
 import numpy as np
 import traceback
 from clustering import ternary_search_clustering
 from evaluation import evaluate_solution
 from logger_config import logger
+
+print("=== Running with INFO level (default) ===")
+os.environ['LOG_LEVEL'] = 'INFO'  # change to DEBUG to get convergence details
 
 seed = 42
 np.random.seed(seed)
@@ -27,7 +30,7 @@ def load_ndarray_pkl(pkl_path):
 
 if __name__ == '__main__':
     # test clustering
-    embeddings_pkl = r"C:\VI\FaceGroup\OtherDatasets\ESC-50\ESC-50-training-CLAP_vectors.pkl"
+    embeddings_pkl = r"...\ESC-50\ESC-50-training-CLAP_vectors.pkl"
 
     # hyper params (user defined)
     min_pts = 5
@@ -47,7 +50,7 @@ if __name__ == '__main__':
         raise e
 
     # evaluate
-    gt_labels_pkl = r"C:\VI\FaceGroup\OtherDatasets\ESC-50\ESC-50-training-CLAP_labels.pkl"
+    gt_labels_pkl = r"...\ESC-50\ESC-50-training-CLAP_labels.pkl"
 
     # load class-labels, an ND Array of shape [N]
     gt_labels = load_ndarray_pkl(gt_labels_pkl)

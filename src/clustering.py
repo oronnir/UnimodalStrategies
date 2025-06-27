@@ -106,7 +106,7 @@ def ternary_search_clustering(features, min_cluster_size, k=None) -> (np.ndarray
         logger.error('Clustering failed', extra={'actual_input_size': actual_input_size})
         return default_degenerate_solution
 
-    logger.info('cast_clustering statistics', extra={'k_estimate': best_solution.k, 'p_noise': best_solution.coverage, 'actual_DBSCAN_n_clusters': best_solution.k})
+    logger.info('ternary_search_clustering statistics', extra={'k_estimate': best_solution.k, 'p_noise': best_solution.coverage, 'actual_DBSCAN_n_clusters': best_solution.k})
     cluster_ids = best_solution.cluster_ids
 
     # get the best thumbnail per cluster
