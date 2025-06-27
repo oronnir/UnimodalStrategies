@@ -1,3 +1,11 @@
+# =============================================================================
+# ECML-PKDD 2025 ‒ “Unimodal Strategies in Density-Based Clustering”
+# Authors : Oron Nir*, Jay Tenenbaum, Ariel Shamir
+# Paper   : https://arxiv.org/abs/######   (pre-print link)
+# Code    : https://github.com/oronnir/UnimodalStrategies
+# License : MIT (see LICENSE file for full text)
+# =============================================================================
+
 import numpy as np
 from sklearn.cluster import DBSCAN
 from sklearn.neighbors import NearestNeighbors
@@ -254,3 +262,15 @@ def ternary_search_estimator(x, eps_lb: float, eps_ub: float, min_samples: int, 
     best_solution = ClusteringSolution(None, eps_star, 0, 0, 0, None)
     best_solution = cluster_and_update_best(best_solution, x, min_samples, eps_star, num_iterations, num_iterations)
     return best_solution
+
+
+def dip_unimodality_test(ex_ks):
+    """
+    dip_unimodality_test: run the dip test to determine the unimodality of the data
+    :param ex_ks: the number of clusters
+    :param ex_epsilons: the epsilons
+    """
+    import diptest
+    dip = diptest.diptest(np.array(ex_ks))
+    print(f'Dip test result: {dip} over {len(ex_ks)} samples: DIP_stat={dip[0]} p_value={dip[1]}. If p_value >= 0.05, the data is unimodal!')
+    
