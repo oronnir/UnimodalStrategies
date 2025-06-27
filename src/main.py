@@ -1,6 +1,12 @@
+# =============================================================================
+# ECML-PKDD 2025 ‒ “Unimodal Strategies in Density-Based Clustering”
+# Authors : Oron Nir*, Jay Tenenbaum, Ariel Shamir
+# Paper   : https://arxiv.org/abs/######   (pre-print link)
+# Code    : https://github.com/oronnir/UnimodalStrategies
+# License : MIT (see LICENSE file for full text)
+# =============================================================================
 import os.path
 import pickle
-
 import numpy as np
 import traceback
 from clustering import ternary_search_clustering
