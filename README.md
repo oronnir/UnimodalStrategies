@@ -33,7 +33,7 @@ cd UnimodalStrategies
 pip install -r requirements.txt     # numpy, scipy, scikit-learn, matplotlib
 ```
 
-Unzip the evaluation dataset provided in `/ESC-50/ESC-50\ESC-50-training-CLAP_labeled_vectors.zip`. This zip contains two pickle files:
+Unzip the evaluation dataset provided in `/ESC-50/ESC-50-training-CLAP_labeled_vectors.zip`. This zip contains two pickle files:
 ```
 └─ ESC-50/
      └─ ESC-50-training-CLAP_labels.pkl    # class-label ids for ESC-50 training dataset
