@@ -1,6 +1,6 @@
 numpy~=1.24.4
 scipy~=1.10.1
 scikit-learn~=1.3.1
-
+diptest~=0.9.0
 kneed~=0.8.5
 matplotlib~=3.8.0
