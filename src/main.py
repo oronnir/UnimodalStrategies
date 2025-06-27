@@ -11,10 +11,10 @@ import numpy as np
 import traceback
 from clustering import ternary_search_clustering
 from evaluation import evaluate_solution
+
+print("=== Running with INFO level (default), change to DEBUG for more details ===")
 from logger_config import logger
 
-print("=== Running with INFO level (default) ===")
-os.environ['LOG_LEVEL'] = 'INFO'  # change to DEBUG to get convergence details
 
 seed = 42
 np.random.seed(seed)

@@ -33,6 +33,14 @@ cd UnimodalStrategies
 pip install -r requirements.txt     # numpy, scipy, scikit-learn, matplotlib
 ```
 
+## Logging Levels
+
+- **ERROR**: Only shows error messages and exceptions
+- **WARNING**: Shows warnings and errors
+- **INFO**: Shows main progress information, results, and statistics (default)
+- **DEBUG**: Shows detailed debugging information including all iterations and intermediate results
+
+
 For citation please use:
 ```
 @inproceedings{nir2025unimodal,
