@@ -1,6 +1,6 @@
 # =============================================================================
 # ECML-PKDD 2025 ‒ “Unimodal Strategies in Density-Based Clustering”
-# Authors : Oron Nir*, Jay Tenenbaum, Ariel Shamir
+# Authors : Oron Nir, Jay Tenenbaum, Ariel Shamir
 # Paper   : https://arxiv.org/abs/######   (pre-print link)
 # Code    : https://github.com/oronnir/UnimodalStrategies
 # License : MIT (see LICENSE file for full text)
@@ -10,45 +10,46 @@ import pickle
 import numpy as np
 import traceback
 from clustering import ternary_search_clustering
+from evaluation import evaluate_solution
 
 seed = 42
 np.random.seed(seed)
 
 
-def run_clustering_test(pkl_path, k=None):
-    # hyper params
-    min_pts = 5
-
-    # load data
+def load_ndarray_pkl(pkl_path):
     with open(pkl_path, 'rb') as file:
         x = pickle.load(file)
-
-    try:
-        assert isinstance(x, np.ndarray)
-        print(f"Loaded data with shape {x.shape} of N={x.shape[0]} samples and D={x.shape[1]} features.")
-    except Exception as e:
-        print(f"Failed to load data: {e}")
-        traceback.print_exc()
-        raise e
-
-    # run clustering
-    labels = []
-    try:
-        labels, actual_k, best_solution = ternary_search_clustering(x, min_pts, k)
-        label_set = set(labels) - {-1}
-        print("Grouped into initial groups", dict(num_clusters=len(label_set)))
-    except Exception as e:
-        print(f"Clustering failure: {e}")
-        traceback.print_exc()
-
-    return labels
+    assert isinstance(x, np.ndarray)
+    print(f"Loaded data with shape {x.shape}.")
+    return x
 
 
 if __name__ == '__main__':
     # test clustering
-    dataset_path = r"C:\...\ESC.pkl"
-    dataset_known_k = None
+    dataset_path = r"C:\VI\FaceGroup\OtherDatasets\ESC-50\ESC-50-training-CLAP_vectors.pkl"
+    # dataset_path = r"C:\...\ESC.pkl"
 
-    # run clustering test
-    run_clustering_test(dataset_path, dataset_known_k)
-    print('Clustering test passed!')
+    # hyper params (user defined)
+    min_pts = 5
+
+    # load instances ND Array of shape [N, D]
+    x = load_ndarray_pkl(dataset_path)
+
+    # run clustering
+    pred_labels = []
+    try:
+        pred_labels, actual_k, best_solution = ternary_search_clustering(x, min_pts, k=None)
+        label_set = set(pred_labels) - {-1}
+        print("Grouped into initial groups", dict(num_clusters=len(label_set)))
+    except Exception as e:
+        print(f"Clustering failure: {e}")
+        traceback.print_exc()
+        raise e
+
+    # evaluate
+    gt_labels_pkl = r"C:\VI\FaceGroup\OtherDatasets\ESC-50\ESC-50-training-CLAP_labels.pkl"
+
+    # load class-labels, an ND Array of shape [N]
+    gt_labels = load_ndarray_pkl(gt_labels_pkl)
+    stats = evaluate_solution(pred_labels, gt_labels)
+    print(f"The evaluation concluded with the following statistics: {stats}")

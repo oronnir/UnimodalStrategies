@@ -1,6 +1,6 @@
 # =============================================================================
 # ECML-PKDD 2025 ‒ “Unimodal Strategies in Density-Based Clustering”
-# Authors : Oron Nir*, Jay Tenenbaum, Ariel Shamir
+# Authors : Oron Nir, Jay Tenenbaum, Ariel Shamir
 # Paper   : https://arxiv.org/abs/######   (pre-print link)
 # Code    : https://github.com/oronnir/UnimodalStrategies
 # License : MIT (see LICENSE file for full text)
@@ -112,8 +112,6 @@ def ternary_search_dbscan(x, eps_lb: float, eps_ub: float, min_samples: int, num
     """
     bin_ks = []
     bin_epsilons = []
-    original_eps_lb = eps_lb
-    original_eps_ub = eps_ub
     actual_k_right = 1
     best_solution = ClusteringSolution(None, eps_lb, 0, 0, 0, None)
     print('Starting ternary_search_dbscan', dict(eps_lb=eps_lb, eps_ub=eps_ub, N=x.shape[0]))
