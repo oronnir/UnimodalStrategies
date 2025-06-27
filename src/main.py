@@ -30,7 +30,7 @@ def load_ndarray_pkl(pkl_path):
 
 if __name__ == '__main__':
     # test clustering
-    embeddings_pkl = r"...\ESC-50\ESC-50-training-CLAP_vectors.pkl"
+    embeddings_pkl = "../ESC-50/ESC-50-training-CLAP_vectors.pkl"
 
     # hyper params (user defined)
     min_pts = 5
@@ -50,7 +50,7 @@ if __name__ == '__main__':
         raise e
 
     # evaluate
-    gt_labels_pkl = r"...\ESC-50\ESC-50-training-CLAP_labels.pkl"
+    gt_labels_pkl = "../ESC-50/ESC-50-training-CLAP_labels.pkl"
 
     # load class-labels, an ND Array of shape [N]
     gt_labels = load_ndarray_pkl(gt_labels_pkl)

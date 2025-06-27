@@ -40,6 +40,26 @@ pip install -r requirements.txt     # numpy, scipy, scikit-learn, matplotlib
 - **INFO**: Shows main progress information, results, and statistics (default)
 - **DEBUG**: Shows detailed debugging information including all iterations and intermediate results
 
+## Usage
+
+### Setting Log Level via Environment Variable
+
+**Windows (PowerShell):**
+```powershell
+$env:LOG_LEVEL="DEBUG"; python src/main.py
+```
+
+**Windows (Command Prompt):**
+```cmd
+set LOG_LEVEL=DEBUG && python src/main.py
+```
+
+**Linux/Mac:**
+```bash
+LOG_LEVEL=DEBUG python src/main.py
+```
+
+# Citation
 
 For citation please use:
 ```
@@ -50,3 +70,4 @@ For citation please use:
   year      = {2025},
   url       = {https://github.com/oronnir/UnimodalStrategies}
 }
+```
