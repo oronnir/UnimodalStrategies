@@ -8,8 +8,6 @@
 
 import time
 import numpy as np
-from numpy import linalg as LA
-from scipy.spatial.distance import cosine
 from clustering_methods import ternary_search_dbscan, get_k_coverage, ternary_search_dbscan_with_k
 from logger_config import logger
 
@@ -67,17 +65,17 @@ def init_epsilon_lb(x, eps_lb, eps_ub, min_cluster_size, alpha, num_iterations=1
 def init_dbscan_hyper_parameters(x, min_cluster_size):
     # adjust the hyperparameters by the scale of the input
     # set the max_iterations w.r.t. the number of samples
-    iterations = 12
+    ITERATIONS = 12
     eps_ub = 1.0
     eps_lb = 0.0000001
-    alpha = 0.2
+    ALPHA = 0.2
 
     start_time = time.time()
-    eps_ub = min(eps_ub, init_epsilon_ub(x, eps_lb, eps_ub, min_cluster_size, alpha=alpha, num_iterations=iterations))
+    eps_ub = min(eps_ub, init_epsilon_ub(x, eps_lb, eps_ub, min_cluster_size, alpha=ALPHA, num_iterations=ITERATIONS))
     logger.debug('init_epsilon_ub', extra={'duration': time.time() - start_time})
-    eps_lb = max(eps_lb, init_epsilon_lb(x, eps_lb, eps_ub, min_cluster_size, alpha=alpha, num_iterations=iterations))
+    eps_lb = max(eps_lb, init_epsilon_lb(x, eps_lb, eps_ub, min_cluster_size, alpha=ALPHA, num_iterations=ITERATIONS))
     logger.debug('init_epsilon_lb + UB', extra={'duration': time.time() - start_time})
-    return iterations, eps_lb, eps_ub
+    return ITERATIONS, eps_lb, eps_ub
 
 
 def ternary_search_clustering(features, min_cluster_size, k=None) -> (np.ndarray, int, np.ndarray, dict):

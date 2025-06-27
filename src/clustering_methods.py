@@ -206,12 +206,12 @@ def ternary_search_dbscan_with_k(x, eps_lb: float, eps_ub: float, min_samples: i
     eps_lb = ts_solution.epsilon
     k_at_eps_ub = 1
     k_at_eps_lb = ts_solution.k
-    eps_tolerance = 0.0000001
+    EPS_TOLERANCE = 0.0000001
 
     # run binary search to find the epsilon that yields the closest k
     logger.debug('Starting binary search dbscan for k', extra={'eps_lb': eps_lb, 'eps_ub': eps_ub, 'N': x.shape[0]})
     iteration_counter = 1
-    while k_prior != best_solution.k and k_at_eps_lb > k_at_eps_ub and eps_ub - eps_lb > eps_tolerance:
+    while k_prior != best_solution.k and k_at_eps_lb > k_at_eps_ub and eps_ub - eps_lb > EPS_TOLERANCE:
         logger.debug(f'iteration #{iteration_counter}: eps_lb: {eps_lb}, eps_ub: {eps_ub}, k_at_eps_lb: {k_at_eps_lb}, k_at_eps_ub: {k_at_eps_ub}')
         iteration_counter += 1
         mid_point = (eps_lb + eps_ub) / 2
@@ -237,12 +237,12 @@ def ternary_search_estimator(x, eps_lb: float, eps_ub: float, min_samples: int, 
     on the full dataset.
     """
     # sample the data multiple times to estimate the optimal epsilon
-    num_samples = 30
-    alpha_d = 0.2
-    alpha_n = 0.2
-    sample_dim = [int(x.shape[0] * alpha_n), int(x.shape[1] * alpha_d)]
+    NUM_SAMPLES = 30
+    ALPHA_D = 0.2
+    ALPHA_N = 0.2
+    sample_dim = [int(x.shape[0] * ALPHA_N), int(x.shape[1] * ALPHA_D)]
     eps_stars = []
-    for i in range(num_samples):
+    for i in range(NUM_SAMPLES):
         row_indices = np.random.choice(x.shape[0], sample_dim[0], replace=False)
         col_indices = np.random.choice(x.shape[1], sample_dim[1], replace=False)
         submatrix = x[row_indices][:, col_indices]
@@ -252,7 +252,8 @@ def ternary_search_estimator(x, eps_lb: float, eps_ub: float, min_samples: int, 
         eps_stars.append(best_solution.epsilon)
 
     # estimate the optimal epsilon
-    eps_star = np.dot([eps_lb, eps_ub, np.mean(eps_stars)], [0.4, 0.3, 0.3])
+    LAMBDAS = np.array([0.4, 0.3, 0.3])
+    eps_star = np.dot([eps_lb, eps_ub, np.mean(eps_stars)], LAMBDAS)
 
     # run DBSCAN on the full dataset
     best_solution = ClusteringSolution(None, eps_star, 0, 0, 0, None)

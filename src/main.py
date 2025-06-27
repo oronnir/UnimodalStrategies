@@ -5,7 +5,6 @@
 # Code    : https://github.com/oronnir/UnimodalStrategies
 # License : MIT (see LICENSE file for full text)
 # =============================================================================
-import os
 import pickle
 import numpy as np
 import traceback
