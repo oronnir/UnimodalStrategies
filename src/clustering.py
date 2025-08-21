@@ -12,6 +12,50 @@ from clustering_methods import ternary_search_dbscan, get_k_coverage, ternary_se
 from logger_config import logger
 
 
+def naive_ub(x: np.ndarray, metric: str = "cosine"):
+    """
+    Given X of shape (N, D), find the index j in {1,...,N-1} that maximizes
+    distance to X[0] under the chosen metric.
+
+    Parameters
+    ----------
+    x : np.ndarray
+        Array of shape (N, D).
+    metric : str, optional
+        Distance metric: "cosine", "l1", or "l2". Default is "cosine".
+
+    Returns
+    -------
+    j : int
+        Index of the farthest example (excluding 0).
+    dist : float
+        Distance to X[0].
+    """
+    if x.ndim != 2 or x.shape[0] < 2:
+        raise ValueError("x must be (N,D) with N >= 2")
+
+    if metric == "cosine":
+        eps = np.finfo(x.dtype).eps  # numerical epsilon not DBSCAN's...
+        norms = np.linalg.norm(x, axis=1, keepdims=True)
+        norms = np.maximum(norms, eps)
+        xn = x / norms
+        sims = xn[1:] @ xn[0]
+        sims = np.clip(sims, -1.0, 1.0)       # numerical safety
+        dists = 1.0 - sims
+
+    elif metric == "l2":
+        diffs = x[1:] - x[0]
+        dists = np.linalg.norm(diffs, axis=1)
+
+    elif metric == "l1":
+        diffs = x[1:] - x[0]
+        dists = np.sum(np.abs(diffs), axis=1)
+
+    else:
+        raise ValueError(f"Unsupported metric: {metric}")
+
+    return max(dists)
+
 def init_epsilon_ub(x, eps_lb, eps_ub, min_samples, alpha=0.2, num_iterations=10):
     """
     Initialize the epsilon search by running DBSCAN with the given eps_lb and eps_ub.
@@ -66,7 +110,7 @@ def init_dbscan_hyper_parameters(x, min_cluster_size):
     # adjust the hyperparameters by the scale of the input
     # set the max_iterations w.r.t. the number of samples
     ITERATIONS = 12
-    eps_ub = 1.0
+    eps_ub = min(1.0, naive_ub(x))
     eps_lb = 0.0000001
     ALPHA = 0.2
 
@@ -111,3 +155,4 @@ def ternary_search_clustering(features, min_cluster_size, k=None) -> (np.ndarray
     actual_k, coverage = get_k_coverage(cluster_ids)
     logger.info('Clustering final statistics', extra={'actual_k_final': actual_k, 'coverage_final': coverage})
     return cluster_ids, actual_k, best_solution
+
