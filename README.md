@@ -1,7 +1,11 @@
 # Unimodal Strategies in Density-Based Clustering
 <p align="center">
-  <img src="https://img.shields.io/badge/ECML--PKDD-2025-blue.svg" alt="ECML-PKDD 2025">
-  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License">
+  <a href="https://ecmlpkdd.org/preprints/2025/" target="_blank">
+    <img src="https://img.shields.io/badge/ECML--PKDD-2025-blue.svg" alt="ECML-PKDD 2025">
+  </a>
+  <a href="https://opensource.org/licenses/MIT" target="_blank">
+    <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License">
+  </a>
   <img src="https://img.shields.io/badge/python-3.9%2B-yellow.svg" alt="Python 3.9+">
 </p>
 
