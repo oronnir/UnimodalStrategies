@@ -16,7 +16,7 @@ This repository accompanies the following paper, accepted to **ECML-PKDD 2025**:
 > Oron Nir, Jay Tenenbaum, Ariel Shamir  
 > ECML-PKDD 2025 (research track)
 
-[[arXiv preprint]](https://arxiv.org/abs/2506.21695) | [[PDF paper]](Unimodal_Strategies-NirTenenbaumShamir-ECML-PKDD2025.pdf) | [[PDF presentation deck]](Unimodal_Strategies-NirTenenbaumShamir-ECML-PKDD2025.pdf)
+[[arXiv preprint]](https://arxiv.org/abs/2506.21695) | [[PDF paper]](Unimodal_Strategies-NirTenenbaumShamir-ECML-PKDD2025.pdf) | [[PDF presentation deck]](Unimodal_Strategies_deck.pdf)
 
 ---
 
