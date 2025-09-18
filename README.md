@@ -3,10 +3,16 @@
   <a href="https://ecmlpkdd.org/preprints/2025/" target="_blank">
     <img src="https://img.shields.io/badge/ECML--PKDD-2025-blue.svg" alt="ECML-PKDD 2025">
   </a>
-  <a href="https://opensource.org/licenses/MIT" target="_blank">
-    <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License">
+  <a href="https://arxiv.org/abs/2506.21695" target="_blank">
+    <img src="https://img.shields.io/badge/Preprint-arXiv-red.svg" alt="arXiv">
   </a>
-  <img src="https://img.shields.io/badge/python-3.9%2B-yellow.svg" alt="Python 3.9+">
+    <a href="Unimodal_Strategies_deck.pdf" target="_blank">
+    <img src="https://img.shields.io/badge/Presentation-ECML--PKDD-orange.svg" alt="Presentation Deck">
+  </a>
+  <a href="https://opensource.org/licenses/MIT" target="_blank">
+    <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License">
+  </a>
+  <img src="https://img.shields.io/badge/Python-3.9%2B-yellow.svg" alt="Python 3.9+">
 </p>
 
 A **light-weight, parameter-free drop-in for DBSCAN** that finds its radius (ε) automatically in *O(D N²)* time by exploiting a near-unimodal relation between ε and the resulting number of clusters *k*.  
@@ -16,7 +22,6 @@ This repository accompanies the following paper, accepted to **ECML-PKDD 2025**:
 > Oron Nir, Jay Tenenbaum, Ariel Shamir  
 > ECML-PKDD 2025 (research track)
 
-[[arXiv preprint]](https://arxiv.org/abs/2506.21695) | [[PDF paper]](Unimodal_Strategies-NirTenenbaumShamir-ECML-PKDD2025.pdf) | [[PDF presentation deck]](Unimodal_Strategies_deck.pdf)
 
 ---
 
@@ -69,6 +74,10 @@ set LOG_LEVEL=DEBUG && python src/main.py
 ```bash
 LOG_LEVEL=DEBUG python src/main.py
 ```
+
+## Additional Resources:
+[[arXiv preprint]](https://arxiv.org/abs/2506.21695) | [[PDF paper]](Unimodal_Strategies-NirTenenbaumShamir-ECML-PKDD2025.pdf) | [[PDF presentation deck]](Unimodal_Strategies_deck.pdf)
+
 
 # Citation
 
